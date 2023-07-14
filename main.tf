@@ -30,13 +30,13 @@ resource "azurerm_spring_cloud_app" "terraform_app" {
 }
 
 module "upload_binary" {
-  source = "./upload"
+  source = "./upload_local"
 
   resource_group_name = var.resource_group_name
   location            = "eastus"
 
   resource_id = azurerm_spring_cloud_app.terraform_app.id
-  source_url  = "https://clie2etest.blob.core.windows.net/sample-jar/echo-app-0.0.1-SNAPSHOT.jar"
+  local_path = var.local_path
 }
 
 resource "azapi_resource" "deployment" {
@@ -67,5 +67,5 @@ resource "azapi_resource" "deployment" {
     }
   })
 
-  depends_on = [ module.upload_binary ]
+  depends_on = [module.upload_binary]
 }
